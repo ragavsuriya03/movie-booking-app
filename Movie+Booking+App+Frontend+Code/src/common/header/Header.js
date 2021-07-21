@@ -241,6 +241,7 @@ class Header extends Component {
                                 Logout
                             </Button>
                         </div>
+                        {console.log(this.props)}
                         <div className="bookshow-button">
                             <Link to={"/bookshow/" + this.props.id}>
                                 <Button variant="contained" color="primary">

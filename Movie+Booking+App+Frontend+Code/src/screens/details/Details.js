@@ -52,7 +52,7 @@ class Details extends Component {
         let xhrMovie = new XMLHttpRequest();
         xhrMovie.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                debugger;
+                //debugger;
                 that.setState({
                     movie: JSON.parse(this.responseText)[0]
                 });
@@ -93,7 +93,9 @@ class Details extends Component {
                 autoplay: 1
             }
         }
+        {console.log(this.props)}
         return (
+            
             <div className="details">
                 <Header id={this.props.match.params.id} baseUrl={this.props.baseUrl} showBookShowButton="true" />
                 <div className="back">
