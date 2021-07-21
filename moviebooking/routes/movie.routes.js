@@ -1,3 +1,4 @@
+
 module.exports= app =>{
   const movies= require("../controllers/movie.controller.js");
 

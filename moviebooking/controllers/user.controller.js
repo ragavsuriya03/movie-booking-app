@@ -1,6 +1,10 @@
 const db = require("../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { v4 : uuidv4} = require("uuid");
+//const { atob, btoa } = require("b2a");
+const TokenGenerator = require("uuid-token-generator");
+const tokenGenerator = new TokenGenerator();
 
 const User = db.users;
 
@@ -25,7 +29,7 @@ exports.signUp= async (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, salt);
 
       const user = new User({
-        userid: "",
+        userid: uuidv4(),
         email: req.body.email,
         first_name: req.body.first_name,
         last_name: req.body.last_name,
@@ -36,7 +40,7 @@ exports.signUp= async (req, res) => {
         isLoggedIn: true, 
       });
       try {
-        let userSaved = await user.save(user);
+        let userSaved =  user.save(user);
         res.send(userSaved);
       } 
       catch(err) {
@@ -85,17 +89,16 @@ exports.login =async (req, res) => {
 
 
 exports.logout = async (req, res) => {
-  console.log('inside logout')
+  //console.log('inside logout')
   
   if (!req.body.uuid) {
     res.status(400).send({ message: "Please provide user Id." });
     return;
   }
-  
   try{
     console.log(req.body);
     const id = req.body.uuid;
-    const update = { isLoggedIn: false };
+    const update = { isLoggedIn: false};
 
     let user = User.findByIdAndUpdate(id, update);
 
@@ -109,4 +112,51 @@ exports.logout = async (req, res) => {
   catch (err) {
         res.status(500).send({message: "Error updating.",});
   }
+    
+};
+
+exports.getCouponCode = async (req, res) => {
+  // if (!req.body.coupens) {
+  //   res.status(400).send({ message: "Please provide a valid Coupon." });
+  //   return;
+  // }
+
+  // const coupens = req.body.coupens;
+
+  // User.findByCoupons(coupens, update)
+  //   .then((data) => {
+  //     if (!data) {
+  //       res.status(404).send({
+  //         message: "Some error occurred, please try again later.",
+  //       });
+  //     } else res.send({ message: "Coupen Passed Succesfully" });
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).send({
+  //       message: "Error updating.",
+  //     });
+  //   });
+  console.log("Start fetching coupons")
+  const token = req.headers["x-access-token"] || req.headers["authorization"];
+  console.log(token)
+  User.find({accesstoken: token}).then(function(user){
+      if(user[0].coupens)
+          res.send(user[0].coupens);
+      else
+          res.send([])
+  });
+ 
+};
+
+
+exports.bookShow = (req, res) => {
+  const token = req.headers["x-access-token"] || req.headers["authorization"];
+  console.log(token)
+  User.find({accesstoken: token}).then(function(user){
+      if(user[0].bookingRequests)
+          res.send(user[0].bookingRequests);
+      else
+          res.send([])
+  });
+ 
 };
