@@ -103,8 +103,8 @@ class Header extends Component {
         let that = this;
         xhrLogin.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                //console.log(JSON.parse(this.responseText));
-                sessionStorage.setItem("uuid", JSON.parse(this.responseText).details.id);
+                console.log(JSON.parse(this.responseText));
+                sessionStorage.setItem("uuid", JSON.parse(this.responseText).uuid);
                 //sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
 
                 if(xhrLogin.getResponseHeader("access-token") === null)

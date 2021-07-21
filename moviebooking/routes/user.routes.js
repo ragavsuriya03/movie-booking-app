@@ -1,5 +1,3 @@
-const auth = require("../middleware/auth"); 
-
 module.exports = app => {
   const users = require("../controllers/user.controller");
 
@@ -9,9 +7,9 @@ module.exports = app => {
 
     router.post("/auth/signup", users.signUp);
 
-    router.post("/auth/logout", auth, users.logout);
+    router.post("/auth/logout", users.logout);
 
-    router.get("/getCouponCode", auth, users.getCouponCode);
+    router.get("/getCouponCode", users.getCouponCode);
 
     router.get("/bookShow", users.bookShow);
 
