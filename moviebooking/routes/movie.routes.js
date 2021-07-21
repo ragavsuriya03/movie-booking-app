@@ -1,22 +1,18 @@
-module.exports = (app) => {
-  const movies = require("../controllers/movie.controller");
+module.exports= app =>{
+  const movies= require("../controllers/movie.controller.js");
 
   var router = require("express").Router();
 
-  // Retrieve all Movies
-  router.get("/movies", movies.findAllMovies);
 
-  // Retrieve all Movies by status
-  router.get("/movies/:status", movies.findAllMovies);
+  router.get('/movies',movies.findAllMovies);
 
-  // Retrieve all Movies by movieId
-  router.get("/movies/:id", movies.findOne);
+  router.get('/movies?status=PUBLISHED',);
 
-  // Retrieve all published Courses
-  router.get(
-    "/movies/:status/:title/:genres/:artists/:start_date/:end_date",
-    movies.findShows
-  );
+  router.get('/movies?status=RELEASED',);
 
-  app.use("/api", router);
+  router.get('/movies/:movieId',movies.findOne);
+
+ //router.get('/movies?status=RELEASED&title={title}&genres={genres}&artists={artists}&start_date={startdate}&end_date={enddate}',);
+
+  app.use('/api', router);
 };

@@ -1,14 +1,13 @@
+var express = require('express');
 const db = require("../models");
 const Genre = db.genres;
 
-exports.findAllGenres = (req, res) => {
-  Genre.find({})
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving Genres.",
-      });
-    });
-};
+async function findAllGenres(req,res){
+    const data= await db.genres.find({});
+    //console.log(data);
+    res.json(data);
+}
+
+module.exports={
+    findAllGenres
+} 
