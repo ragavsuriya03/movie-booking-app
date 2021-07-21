@@ -229,29 +229,38 @@ class Header extends Component {
             <div>{console.log(this.state)}
                 <header className="app-header">
                     <img src={logo} className="app-logo" alt="Movies App Logo" />
-                    { !this.state.loggedIn ?
-                        (<div className="login-button">
+                    {!this.state.loggedIn ?
+                        <div className="login-button">
                             <Button variant="contained" color="default" onClick={this.openModalHandler}>
                                 Login
                             </Button>
-                        </div>)
-                        :(<React.Fragment>                      
+                        </div>
+                        :
                         <div className="login-button">
                             <Button variant="contained" color="default" onClick={this.logoutHandler}>
                                 Logout
                             </Button>
                         </div>
-                        {console.log(this.props)}
-                        <div className="bookshow-button">
+                    }
+                    {this.props.showBookShowButton === "true" && !this.state.loggedIn
+                        ? <div className="bookshow-button">
+                            <Button variant="contained" color="primary" onClick={this.openModalHandler}>
+                                Book Show
+                            </Button>
+                        </div>
+                        : ""
+                    }
+
+                    {this.props.showBookShowButton === "false" && this.state.loggedIn
+                        ? <div className="bookshow-button">
                             <Link to={"/bookshow/" + this.props.id}>
                                 <Button variant="contained" color="primary">
                                     Book Show
                                 </Button>
                             </Link>
                         </div>
-                        </React.Fragment>)
+                        : ""
                     }
-                    {console.log(this.props)}
                 </header>
                 <Modal
                     ariaHideApp={false}
