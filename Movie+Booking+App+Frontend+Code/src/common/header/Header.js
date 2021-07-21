@@ -58,7 +58,7 @@ class Header extends Component {
             contactRequired: "dispNone",
             contact: "",
             registrationSuccess: false,
-            loggedIn: sessionStorage.getItem("access-token") == null ? false : true
+            loggedIn: sessionStorage.getItem("access-token") === null ? false : true
         }
     }
 
@@ -95,17 +95,21 @@ class Header extends Component {
         this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
         this.state.loginPassword === "" ? this.setState({ loginPasswordRequired: "dispBlock" }) : this.setState({ loginPasswordRequired: "dispNone" });
 
-        let dataLogin = null;
+        let dataLogin = JSON.stringify({
+            "username": this.state.username,
+            "password": this.state.loginPassword
+        });
         let xhrLogin = new XMLHttpRequest();
         let that = this;
         xhrLogin.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
+                //console.log(JSON.parse(this.responseText));
+                sessionStorage.setItem("uuid", JSON.parse(this.responseText).details.id);
                 //sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
 
-                if(xhrLogin.getResponseHeader("access-token") == null)
+                if(xhrLogin.getResponseHeader("access-token") === null)
                 {
-                    sessionStorage.setItem("access-token", JSON.parse(this.responseText)["access-token"]);
+                    sessionStorage.setItem("access-token", JSON.parse(this.responseText).token);
                 }
                 
             
@@ -141,7 +145,7 @@ class Header extends Component {
         this.state.contact === "" ? this.setState({ contactRequired: "dispBlock" }) : this.setState({ contactRequired: "dispNone" });
 
         let dataSignup = JSON.stringify({
-            "email_address": this.state.email,
+            "email": this.state.email,
             "first_name": this.state.firstname,
             "last_name": this.state.lastname,
             "mobile_number": this.state.contact,
@@ -155,6 +159,7 @@ class Header extends Component {
                 that.setState({
                     registrationSuccess: true
                 });
+                //console.log("register success"+dataSignup);
             }
         });
 
@@ -189,14 +194,16 @@ class Header extends Component {
         //Mofification By Mahesh Panhale
 
         let dataSignout = JSON.stringify({
-            "uuid": sessionStorage.getItem("uuid")
+            "uuid": sessionStorage.getItem("uuid"),
+            "token": sessionStorage.getItem("access-token")
         });
 
         let xhrSignout = new XMLHttpRequest();
         let that = this;
         xhrSignout.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                if(JSON.parse(this.responseText).message == "Logged Out successfully.")
+                console.log("inside signout listener");
+                if(JSON.parse(this.responseText).message === "Logged Out successfully.")
                 {
                     sessionStorage.removeItem("uuid");
                     sessionStorage.removeItem("access-token");
@@ -212,49 +219,38 @@ class Header extends Component {
         xhrSignout.setRequestHeader("Content-Type", "application/json");
         xhrSignout.setRequestHeader("Cache-Control", "no-cache");
         xhrSignout.send(dataSignout);
-
+        
 
         
     }
-
+    
     render() {
         return (
-            <div>
+            <div>{console.log(this.state)}
                 <header className="app-header">
                     <img src={logo} className="app-logo" alt="Movies App Logo" />
-                    {!this.state.loggedIn ?
-                        <div className="login-button">
+                    { !this.state.loggedIn ?
+                        (<div className="login-button">
                             <Button variant="contained" color="default" onClick={this.openModalHandler}>
                                 Login
                             </Button>
-                        </div>
-                        :
+                        </div>)
+                        :(<React.Fragment>                      
                         <div className="login-button">
                             <Button variant="contained" color="default" onClick={this.logoutHandler}>
                                 Logout
                             </Button>
                         </div>
-                    }
-                    {this.props.showBookShowButton === "true" && !this.state.loggedIn
-                        ? <div className="bookshow-button">
-                            <Button variant="contained" color="primary" onClick={this.openModalHandler}>
-                                Book Show
-                            </Button>
-                        </div>
-                        : ""
-                    }
-
-                    {this.props.showBookShowButton === "true" && this.state.loggedIn
-                        ? <div className="bookshow-button">
+                        <div className="bookshow-button">
                             <Link to={"/bookshow/" + this.props.id}>
                                 <Button variant="contained" color="primary">
                                     Book Show
                                 </Button>
                             </Link>
                         </div>
-                        : ""
+                        </React.Fragment>)
                     }
-
+                    {console.log(this.props)}
                 </header>
                 <Modal
                     ariaHideApp={false}

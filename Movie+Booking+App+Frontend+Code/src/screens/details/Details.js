@@ -101,6 +101,7 @@ class Details extends Component {
                         <Link to="/">  &#60; Back to Home</Link>
                     </Typography>
                 </div>
+                {console.log(this.state)}
                 <div className="flex-containerDetails">
                     <div className="leftDetails">
                         <img src={movie.poster_url} alt={movie.title} />
@@ -163,7 +164,7 @@ class Details extends Component {
                                     <GridListTile
                                         className="gridTile"
                                         onClick={() => this.artistClickHandler(artist.wiki_url)}
-                                        key={artist.id}>
+                                        key={artist.artistid}>
                                         <img src={artist.profile_url} alt={artist.first_name + " " + artist.last_name} />
                                         <GridListTileBar
                                             title={artist.first_name + " " + artist.last_name}

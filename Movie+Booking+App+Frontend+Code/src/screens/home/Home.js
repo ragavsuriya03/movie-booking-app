@@ -73,9 +73,11 @@ class Home extends Component {
         xhr.addEventListener("readystatechange", function () {
           
             if (this.readyState === 4) {
-                debugger;
+                
+               // debugger;
+                    
                 that.setState({
-                    upcomingMovies: JSON.parse(this.responseText).movies
+                    upcomingMovies: JSON.parse(this.responseText)
                 });
             }
         });
@@ -90,7 +92,7 @@ class Home extends Component {
         xhrReleased.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    releasedMovies: JSON.parse(this.responseText).movies
+                    releasedMovies: JSON.parse(this.responseText)
                 });
             }
         });
@@ -105,7 +107,7 @@ class Home extends Component {
         xhrGenres.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    genresList: JSON.parse(this.responseText).genres
+                    genresList: JSON.parse(this.responseText)
                 });
             }
         });
@@ -120,7 +122,7 @@ class Home extends Component {
         xhrArtists.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    artistsList: JSON.parse(this.responseText).artists
+                    artistsList: JSON.parse(this.responseText)
                 });
             }
         });
@@ -179,7 +181,7 @@ class Home extends Component {
         xhrFilter.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    releasedMovies: JSON.parse(this.responseText).movies
+                    releasedMovies: JSON.parse(this.responseText)
                 });
             }
         });
@@ -191,9 +193,10 @@ class Home extends Component {
 
     render() {
         const { classes } = this.props;
+        {console.log(this.props.showBookShowButton)}
         return (
             <div>
-                <Header baseUrl={this.props.baseUrl} />
+                <Header baseUrl={this.props.baseUrl} showBookShowButton={this.props.showBookShowButton} />
 
                 <div className={classes.upcomingMoviesHeading}>
                     <span>Upcoming Movies</span>
@@ -303,7 +306,7 @@ class Home extends Component {
                         </Card>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 }
